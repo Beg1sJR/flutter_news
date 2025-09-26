@@ -9,7 +9,6 @@ final lightTheme = ThemeData(
     brightness: Brightness.light,
   ),
   scaffoldBackgroundColor: Colors.grey[50],
-  // cardColor: Colors.white,
   canvasColor: Colors.grey[300],
   cardColor: Colors.white,
 );
