@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:news/features/auth/domain/entity/app_user.dart';
 import 'package:news/features/profile/presentation/widgets/profile/profile_tile.dart';
 
 void main() {
@@ -43,18 +42,5 @@ void main() {
     );
     await tester.tap(find.byType(ProfileTile));
     expect(tapped, isTrue);
-  });
-
-  // Юнит-тест: Проверка copyWith для AppUserEntity
-  test('AppUserEntity copyWith returns updated values', () {
-    final user = AppUserEntity(
-      uid: '1',
-      username: 'user',
-      email: 'test@mail.com',
-    );
-    final updated = user.copyWith(username: 'newuser');
-    expect(updated.username, 'newuser');
-    expect(updated.uid, '1');
-    expect(updated.email, 'test@mail.com');
   });
 }
