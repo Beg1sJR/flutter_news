@@ -213,3 +213,11 @@ flutter test --coverage
 3. Commit изменения (`git commit -m 'Add amazing feature'`)
 4. Push в branch (`git push origin feature/amazing-feature`)
 5. Откройте Pull Request
+
+## 👨‍💻 Автор
+
+**Beg1sJR**
+- GitHub: [@Beg1sJR](https://github.com/Beg1sJR)
+
+⭐ **Если вам понравился проект, поставьте звездочку!**
+ a full API reference.
