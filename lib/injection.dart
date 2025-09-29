@@ -28,6 +28,7 @@ import 'package:news/features/search/data/data_source/search_news.dart';
 import 'package:news/features/search/data/repository/search_news.dart';
 import 'package:news/features/search/domain/repository/search_news.dart';
 import 'package:news/features/search/presentation/logic/search_news_bloc/search_news_bloc.dart';
+import 'package:news/services/notification/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger_settings.dart';
@@ -82,6 +83,10 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<FirebaseFirestore>(
     () => FirebaseFirestore.instance,
   );
+
+  //firebase notification
+  //services
+  getIt.registerSingleton<NotificationService>(NotificationService());
 
   //router
   getIt.registerSingleton<AppRouter>(AppRouter());
