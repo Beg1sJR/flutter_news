@@ -2,12 +2,10 @@ import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:news/features/profile/domain/repository/settings/settings.dart';
+import 'package:news/injection.dart';
 
 class NotificationService {
-  static final NotificationService _instance = NotificationService._internal();
-  factory NotificationService() => _instance;
-  NotificationService._internal();
-
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -18,15 +16,16 @@ class NotificationService {
   );
 
   Future<void> init() async {
-    // Создание канала для Android
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >()
         ?.createNotificationChannel(channel);
 
-    // Настройка отображения уведомлений при получении push
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      final enabled = getIt<SettingsRepository>().getNotificationsEnabled();
+      if (!enabled) return;
+
       final notification = message.notification;
       final android = message.notification?.android;
 
@@ -39,16 +38,25 @@ class NotificationService {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
-              icon: 'ic_launcher', // Проверьте наличие иконки
+              icon: 'ic_launcher',
             ),
           ),
         );
       }
     });
 
-    // Получение токена (для отладки)
     final messaging = FirebaseMessaging.instance;
     String? token = await messaging.getToken();
     log('Firebase Messaging Token: $token');
+  }
+
+  /// Подписка на push-уведомления
+  Future<void> enablePushNotifications() async {
+    await FirebaseMessaging.instance.subscribeToTopic('all');
+  }
+
+  /// Отключение push-уведомлений
+  Future<void> disablePushNotifications() async {
+    await FirebaseMessaging.instance.unsubscribeFromTopic('all');
   }
 }

@@ -9,6 +9,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
   static const String _darkModeKey = 'dark_mode';
   static const String _languages = 'languages';
+  static const String _notificationsKey = 'notifications_enabled';
 
   @override
   bool getDarkMode() {
@@ -34,11 +35,12 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
   @override
   bool getNotificationsEnabled() {
-    throw UnimplementedError();
+    final enabled = _sharedPreferences.getBool(_notificationsKey);
+    return enabled ?? true;
   }
 
   @override
-  Future<void> setNotificationsEnabled(bool isEnabled) {
-    throw UnimplementedError();
+  Future<void> setNotificationsEnabled(bool isEnabled) async {
+    await _sharedPreferences.setBool(_notificationsKey, isEnabled);
   }
 }

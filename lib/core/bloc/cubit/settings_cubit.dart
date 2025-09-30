@@ -7,15 +7,16 @@ part 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit(this._settingsRepository)
-    : super(const SettingsState(Brightness.light, 'ru')) {
+    : super(const SettingsState(Brightness.light, 'ru', true)) {
     checkTheme();
     loadLanguage();
+    loadNotificationsEnabled();
   }
 
   final SettingsRepository _settingsRepository;
 
   Future<void> setTheme(Brightness brightness) async {
-    emit(SettingsState(brightness, state.language));
+    emit(state.copyWith(brightness: brightness));
     await _settingsRepository.setDarkMode(brightness == Brightness.dark);
   }
 
@@ -34,5 +35,15 @@ class SettingsCubit extends Cubit<SettingsState> {
   void loadLanguage() {
     final language = _settingsRepository.getLanguage();
     emit(state.copyWith(language: language));
+  }
+
+  Future<void> setNotificationsEnabled(bool isEnabled) async {
+    emit(state.copyWith(notificationsEnabled: isEnabled));
+    await _settingsRepository.setNotificationsEnabled(isEnabled);
+  }
+
+  void loadNotificationsEnabled() {
+    final enabled = _settingsRepository.getNotificationsEnabled();
+    emit(state.copyWith(notificationsEnabled: enabled));
   }
 }

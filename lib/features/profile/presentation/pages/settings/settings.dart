@@ -5,6 +5,8 @@ import 'package:news/core/bloc/cubit/settings_cubit.dart';
 import 'package:news/core/theme/theme.dart';
 import 'package:news/features/profile/presentation/widgets/settings/widgets.dart';
 import 'package:news/generated/l10n.dart';
+import 'package:news/injection.dart';
+import 'package:news/services/notification/notification_service.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -14,8 +16,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _notificationsEnabled = true;
-
   final List<Map<String, String>> _languages = [
     {'code': 'ru', 'name': 'Русский'},
     {'code': 'en', 'name': 'English'},
@@ -68,6 +68,10 @@ class _SettingsPageState extends State<SettingsPage> {
     final theme = Theme.of(context);
     final brightness = context.watch<SettingsCubit>().state.brightness;
     final language = context.watch<SettingsCubit>().state.language;
+    final notificationsEnabled = context
+        .watch<SettingsCubit>()
+        .state
+        .notificationsEnabled;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -196,25 +200,39 @@ class _SettingsPageState extends State<SettingsPage> {
                       icon: Icons.notifications_outlined,
                       iconColor: Colors.orange,
                       title: S.of(context).pushNotifications,
-                      subtitle: _notificationsEnabled
+                      subtitle: notificationsEnabled
                           ? S.of(context).turnedOn
                           : S.of(context).turnedOff,
                       trailing: theme.isAndroid
                           ? Switch(
-                              value: _notificationsEnabled,
+                              value: notificationsEnabled,
                               activeColor: Color(0xFF3498DB),
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _notificationsEnabled = value;
-                                });
+                              onChanged: (bool value) async {
+                                context
+                                    .read<SettingsCubit>()
+                                    .setNotificationsEnabled(value);
+                                if (value) {
+                                  await getIt<NotificationService>()
+                                      .enablePushNotifications();
+                                } else {
+                                  await getIt<NotificationService>()
+                                      .disablePushNotifications();
+                                }
                               },
                             )
                           : CupertinoSwitch(
-                              value: _notificationsEnabled,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _notificationsEnabled = value;
-                                });
+                              value: notificationsEnabled,
+                              onChanged: (bool value) async {
+                                context
+                                    .read<SettingsCubit>()
+                                    .setNotificationsEnabled(value);
+                                if (value) {
+                                  await getIt<NotificationService>()
+                                      .enablePushNotifications();
+                                } else {
+                                  await getIt<NotificationService>()
+                                      .disablePushNotifications();
+                                }
                               },
                             ),
                     ),
