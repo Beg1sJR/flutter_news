@@ -23,6 +23,11 @@ class NotificationService {
         ?.createNotificationChannel(channel);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      final deepLink = message.data['deep_link'];
+      if (deepLink != null && deepLink.isNotEmpty) {
+        log('Received deep link: $deepLink');
+      }
+
       final enabled = getIt<SettingsRepository>().getNotificationsEnabled();
       if (!enabled) return;
 
