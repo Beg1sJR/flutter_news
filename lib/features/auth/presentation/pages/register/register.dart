@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:news/core/bloc/cubit/settings_cubit.dart';
 import 'package:news/features/auth/presentation/logic/auth_bloc/auth_bloc.dart';
 import 'package:news/features/auth/presentation/widgets/login/login.dart'
     hide PasswordTextField;
@@ -37,6 +38,9 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final brightness = context.watch<SettingsCubit>().state.brightness;
+    bool isDark = brightness == Brightness.dark;
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -158,7 +162,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     });
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF2C3E50),
+                              backgroundColor: isDark
+                                  ? Color(0xFF2C3E50)
+                                  : Color(0xFF3498DB),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),

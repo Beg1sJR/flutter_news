@@ -134,17 +134,13 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: brightness == Brightness.dark,
                               activeColor: Color(0xFF3498DB),
                               onChanged: (bool value) {
-                                context.read<SettingsCubit>().setTheme(
-                                  value ? Brightness.dark : Brightness.light,
-                                );
+                                _darkThemeSwitch(context, value);
                               },
                             )
                           : CupertinoSwitch(
                               value: brightness == Brightness.dark,
                               onChanged: (bool value) {
-                                context.read<SettingsCubit>().setTheme(
-                                  value ? Brightness.dark : Brightness.light,
-                                );
+                                _darkThemeSwitch(context, value);
                               },
                             ),
                     ),
@@ -208,31 +204,13 @@ class _SettingsPageState extends State<SettingsPage> {
                               value: notificationsEnabled,
                               activeColor: Color(0xFF3498DB),
                               onChanged: (bool value) async {
-                                context
-                                    .read<SettingsCubit>()
-                                    .setNotificationsEnabled(value);
-                                if (value) {
-                                  await getIt<NotificationService>()
-                                      .enablePushNotifications();
-                                } else {
-                                  await getIt<NotificationService>()
-                                      .disablePushNotifications();
-                                }
+                                await _notificationSwitch(context, value);
                               },
                             )
                           : CupertinoSwitch(
                               value: notificationsEnabled,
                               onChanged: (bool value) async {
-                                context
-                                    .read<SettingsCubit>()
-                                    .setNotificationsEnabled(value);
-                                if (value) {
-                                  await getIt<NotificationService>()
-                                      .enablePushNotifications();
-                                } else {
-                                  await getIt<NotificationService>()
-                                      .disablePushNotifications();
-                                }
+                                await _notificationSwitch(context, value);
                               },
                             ),
                     ),
@@ -244,5 +222,20 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  void _darkThemeSwitch(BuildContext context, bool value) {
+    context.read<SettingsCubit>().setTheme(
+      value ? Brightness.dark : Brightness.light,
+    );
+  }
+
+  Future<void> _notificationSwitch(BuildContext context, bool value) async {
+    context.read<SettingsCubit>().setNotificationsEnabled(value);
+    if (value) {
+      await getIt<NotificationService>().enablePushNotifications();
+    } else {
+      await getIt<NotificationService>().disablePushNotifications();
+    }
   }
 }

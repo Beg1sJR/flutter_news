@@ -32,12 +32,7 @@ class BuildInfoStep extends StatelessWidget {
             ),
           ),
           SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(color: Colors.grey[700], fontSize: 13),
-            ),
-          ),
+          Expanded(child: Text(text, style: TextStyle(fontSize: 13))),
         ],
       ),
     );

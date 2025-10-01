@@ -17,11 +17,12 @@ class EmailFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -41,6 +42,9 @@ class EmailFormField extends StatelessWidget {
             validator: validator,
             decoration: InputDecoration(
               labelText: 'Email адрес',
+              labelStyle: TextStyle(
+                color: isEmailError ? Colors.red : Color(0xFF3498DB),
+              ),
               prefixIcon: Container(
                 margin: EdgeInsets.only(left: 12, right: 8),
                 child: Icon(
@@ -68,7 +72,7 @@ class EmailFormField extends StatelessWidget {
                 ),
               ),
               filled: true,
-              fillColor: isEmailError ? Colors.red[50] : Colors.grey[50],
+              fillColor: theme.cardColor,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 16,

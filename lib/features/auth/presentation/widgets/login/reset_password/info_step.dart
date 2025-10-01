@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news/core/bloc/cubit/settings_cubit.dart';
 import 'package:news/features/auth/presentation/widgets/login/reset_password/widgets.dart';
 
 class InfoStep extends StatelessWidget {
@@ -6,13 +8,21 @@ class InfoStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final brightness = context.watch<SettingsCubit>().state.brightness;
+    bool isDark = brightness == Brightness.dark;
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        color: Colors.blue[50],
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFF3498DB).withOpacity(0.2)),
+        border: Border.all(
+          color: isDark
+              ? Colors.transparent
+              : Color(0xFF3498DB).withOpacity(0.2),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,10 +33,7 @@ class InfoStep extends StatelessWidget {
               SizedBox(width: 8),
               Text(
                 'Что происходит дальше?',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF2C3E50),
-                ),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
             ],
           ),

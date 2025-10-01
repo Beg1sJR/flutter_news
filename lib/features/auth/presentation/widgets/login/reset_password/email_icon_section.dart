@@ -8,12 +8,13 @@ class EmailIconSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -44,7 +45,6 @@ class EmailIconSection extends StatelessWidget {
             isEmailSent ? 'Письмо отправлено!' : 'Забыли пароль?',
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF2C3E50),
             ),
           ),
           SizedBox(height: 8),
@@ -53,7 +53,7 @@ class EmailIconSection extends StatelessWidget {
                 ? 'Мы отправили инструкции для сброса пароля на вашу почту. Проверьте входящие сообщения и следуйте инструкциям.'
                 : 'Введите ваш email адрес и мы отправим вам ссылку для сброса пароля',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+            style: TextStyle(fontSize: 14),
           ),
         ],
       ),

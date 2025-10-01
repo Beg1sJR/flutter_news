@@ -79,16 +79,16 @@ class ProfilePage extends StatelessWidget {
                                       : const NetworkImage(
                                           'https://via.placeholder.com/150',
                                         ),
-                                  child:
-                                      (avatarUrl == null || avatarUrl.isEmpty)
-                                      ? Text(
-                                          'УН',
-                                          style: const TextStyle(
-                                            fontSize: 36,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : null,
+                                  // child:
+                                  //     (avatarUrl == null || avatarUrl.isEmpty)
+                                  //     ? Text(
+                                  //         'УН',
+                                  //         style: const TextStyle(
+                                  //           fontSize: 36,
+                                  //           fontWeight: FontWeight.bold,
+                                  //         ),
+                                  //       )
+                                  //     : null,
                                 ),
                               ],
                             ),
@@ -166,7 +166,7 @@ class ProfilePage extends StatelessWidget {
                     child: SizedBox(
                       width: double.infinity,
                       child: TextButton.icon(
-                        onPressed: () async {
+                        onPressed: () {
                           context.read<AuthBloc>().add(Logout());
 
                           context.go('/main');
@@ -175,6 +175,7 @@ class ProfilePage extends StatelessWidget {
                         label: Text(S.of(context).logOut),
                         style: TextButton.styleFrom(
                           backgroundColor: theme.cardColor,
+
                           foregroundColor: Colors.red,
 
                           padding: EdgeInsets.symmetric(vertical: 12),
