@@ -64,17 +64,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final currentState = state;
     if (currentState is! AuthAuthenticated) return;
 
-    emit(UpdateUserDataLoading());
+    emit(currentState.copyWith(isUpdatingAvatar: true));
     try {
       final downloadUrl = await firebaseAuthRepository.uploadAndSaveAvatar(
         imageFile: event.imageFile,
       );
 
-      if (currentState.appUser != null) {
-        final updatedUser = currentState.appUser!.copyWith(
+      // We get the latest state because it might have changed
+      final latestState = state as AuthAuthenticated;
+      if (latestState.appUser != null) {
+        final updatedUser = latestState.appUser!.copyWith(
           avatarUrl: downloadUrl,
         );
-        emit(currentState.copyWith(appUser: updatedUser));
+        emit(
+          latestState.copyWith(appUser: updatedUser, isUpdatingAvatar: false),
+        );
+      } else {
+        emit(latestState.copyWith(isUpdatingAvatar: false));
       }
     } catch (e) {
       emit(UpdateUserDataError(error: e.toString()));

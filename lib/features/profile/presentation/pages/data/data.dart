@@ -92,189 +92,176 @@ class _DataChangePageState extends State<DataChangePage> {
                   ),
                 ),
               ),
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        padding: const EdgeInsets.all(24.0),
-                        decoration: BoxDecoration(
-                          color: theme.cardColor,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Center(
-                              child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 50,
-                                      backgroundImage:
-                                          (avatarUrl != null &&
-                                              avatarUrl.isNotEmpty)
-                                          ? NetworkImage(avatarUrl)
-                                          : const NetworkImage(
-                                              'https://via.placeholder.com/150',
-                                            ),
-                                      child:
-                                          (avatarUrl == null ||
-                                              avatarUrl.isEmpty)
-                                          ? Text(
-                                              'УН',
-                                              style: const TextStyle(
-                                                fontSize: 36,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )
-                                          : null,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            TextButton(
-                              onPressed: () {
-                                _pickAndSaveAvatar();
-                              },
-                              child: Text(
-                                S.of(context).changePhoto,
-                                style: const TextStyle(
-                                  color: Color(0xFF3498DB),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+              body: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
                       ),
-                      const SizedBox(height: 20),
-                      // Form Section
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        padding: const EdgeInsets.all(24.0),
-                        decoration: BoxDecoration(
-                          color: theme.cardColor,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              S.of(context).personalInfromation,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        Center(
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage:
+                                      (avatarUrl != null &&
+                                          avatarUrl.isNotEmpty)
+                                      ? NetworkImage(avatarUrl)
+                                      : const NetworkImage(
+                                          'https://via.placeholder.com/150',
+                                        ),
+                                ),
+                                if (state.isUpdatingAvatar)
+                                  const CircularProgressIndicator(),
+                              ],
                             ),
-                            const SizedBox(height: 24),
-                            CustomTextField(
-                              controller: _nameController
-                                ..text =
-                                    state.appUser?.username ??
-                                    state.user.displayName ??
-                                    S.of(context).noName,
-                              label: S.of(context).fullName,
-                              icon: Icons.person_outline,
-                              keyboardType: TextInputType.name,
-                            ),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              controller: _phoneController
-                                ..text =
-                                    state.appUser?.phoneNumber ??
-                                    '### ### ## ##',
-                              label: S.of(context).phoneNumber,
-                              icon: Icons.phone_outlined,
-                              keyboardType: TextInputType.phone,
-                              inputFormatters: [phoneMaskFormatter],
-                              prefixText: '+7 ',
-                            ),
-                            const SizedBox(height: 16),
-                          ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      SaveButton(
-                        color: const Color(0xFF3498DB),
-                        onPressed: state is UpdateUserDataLoading
-                            ? null
-                            : () {
-                                final Map<String, dynamic> dataToUpdate = {
-                                  'username': _nameController.text.trim(),
-                                  'phoneNumber': _phoneController.text.trim(),
-                                };
-                                if (state.appUser?.username ==
-                                    _nameController.text.trim()) {
-                                  dataToUpdate.remove('username');
-                                }
-                                if (state.appUser?.phoneNumber ==
-                                    _phoneController.text.trim()) {
-                                  dataToUpdate.remove('phoneNumber');
-                                }
-                                if (state.appUser?.username ==
-                                        _nameController.text.trim() &&
-                                    state.appUser?.phoneNumber ==
-                                        _phoneController.text.trim()) {
-                                  _showSnackBar(
-                                    context,
-                                    S.of(context).noChangesToSave,
-                                    Colors.grey,
-                                  );
-                                  return;
-                                }
-
-                                context.read<AuthBloc>().add(
-                                  UpdateUserData(dataToUpdate),
-                                );
-                                _showSnackBar(
-                                  context,
-                                  S.of(context).detailsSuccessfullyUpdated,
-                                  Colors.green,
-                                );
-                              },
-                        child: state is UpdateUserDataLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Text(
-                                S.of(context).saveUpdates,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
-                      ),
-                      const SizedBox(height: 40),
-                    ],
+                        const SizedBox(height: 16),
+                        TextButton(
+                          onPressed: () {
+                            _pickAndSaveAvatar();
+                          },
+                          child: Text(
+                            S.of(context).changePhoto,
+                            style: const TextStyle(
+                              color: Color(0xFF3498DB),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 20),
+                  // Form Section
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.all(24.0),
+                    decoration: BoxDecoration(
+                      color: theme.cardColor,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          S.of(context).personalInfromation,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        CustomTextField(
+                          controller: _nameController
+                            ..text =
+                                state.appUser?.username ??
+                                state.user.displayName ??
+                                S.of(context).noName,
+                          label: S.of(context).fullName,
+                          icon: Icons.person_outline,
+                          keyboardType: TextInputType.name,
+                        ),
+                        const SizedBox(height: 16),
+                        CustomTextField(
+                          controller: _phoneController
+                            ..text =
+                                state.appUser?.phoneNumber ?? '### ### ## ##',
+                          label: S.of(context).phoneNumber,
+                          icon: Icons.phone_outlined,
+                          keyboardType: TextInputType.phone,
+                          inputFormatters: [phoneMaskFormatter],
+                          prefixText: '+7 ',
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SaveButton(
+                    color: const Color(0xFF3498DB),
+                    onPressed: state is UpdateUserDataLoading
+                        ? null
+                        : () {
+                            final Map<String, dynamic> dataToUpdate = {
+                              'username': _nameController.text.trim(),
+                              'phoneNumber': _phoneController.text.trim(),
+                            };
+                            if (state.appUser?.username ==
+                                _nameController.text.trim()) {
+                              dataToUpdate.remove('username');
+                            }
+                            if (state.appUser?.phoneNumber ==
+                                _phoneController.text.trim()) {
+                              dataToUpdate.remove('phoneNumber');
+                            }
+                            if (state.appUser?.username ==
+                                    _nameController.text.trim() &&
+                                state.appUser?.phoneNumber ==
+                                    _phoneController.text.trim()) {
+                              _showSnackBar(
+                                context,
+                                S.of(context).noChangesToSave,
+                                Colors.grey,
+                              );
+                              return;
+                            }
+
+                            context.read<AuthBloc>().add(
+                              UpdateUserData(dataToUpdate),
+                            );
+                            _showSnackBar(
+                              context,
+                              S.of(context).detailsSuccessfullyUpdated,
+                              Colors.green,
+                            );
+                          },
+                    child: state is UpdateUserDataLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            S.of(context).saveUpdates,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                          ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
               ),
             );
           }

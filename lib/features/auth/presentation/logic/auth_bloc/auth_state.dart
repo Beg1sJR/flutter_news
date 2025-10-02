@@ -10,18 +10,28 @@ class AuthInitial extends AuthState {}
 class AuthAuthenticated extends AuthState {
   final User user;
   final AppUserEntity? appUser;
+  final bool isUpdatingAvatar;
 
-  AuthAuthenticated({required this.user, this.appUser});
+  AuthAuthenticated({
+    required this.user,
+    this.appUser,
+    this.isUpdatingAvatar = false,
+  });
 
-  AuthAuthenticated copyWith({User? user, AppUserEntity? appUser}) {
+  AuthAuthenticated copyWith({
+    User? user,
+    AppUserEntity? appUser,
+    bool? isUpdatingAvatar,
+  }) {
     return AuthAuthenticated(
       user: user ?? this.user,
       appUser: appUser ?? this.appUser,
+      isUpdatingAvatar: isUpdatingAvatar ?? this.isUpdatingAvatar,
     );
   }
 
   @override
-  List<Object?> get props => [user, appUser];
+  List<Object?> get props => [user, appUser, isUpdatingAvatar];
 }
 
 class AuthUnauthenticated extends AuthState {}
