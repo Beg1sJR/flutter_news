@@ -84,7 +84,6 @@ Future<void> setupLocator() async {
     () => FirebaseFirestore.instance,
   );
 
-  //firebase notification
   //services
   getIt.registerSingleton<NotificationService>(NotificationService());
 
