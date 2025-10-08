@@ -15,7 +15,8 @@ class NoAuthPage extends StatelessWidget {
             context.push('/login');
           },
           style: ElevatedButton.styleFrom(
-            surfaceTintColor: theme.primaryColor.withOpacity(0.3),
+            backgroundColor: theme.colorScheme.primaryContainer,
+            foregroundColor: theme.colorScheme.primary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),

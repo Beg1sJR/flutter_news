@@ -21,6 +21,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: GNav(
+          selectedIndex: navigationShell.currentIndex,
           tabBorderRadius: 30,
           tabActiveBorder: Border.all(
             color: isDark ? Colors.grey.shade600 : Colors.black,
@@ -48,3 +49,31 @@ class ScaffoldWithNavBar extends StatelessWidget {
     );
   }
 }
+
+
+// body: navigationShell,
+//       bottomNavigationBar: BottomNavigationBar(
+//         currentIndex: navigationShell.currentIndex,
+//         onTap: (int index) => _onTap(context, index),
+//         type: BottomNavigationBarType.fixed,
+//         selectedItemColor: theme.colorScheme.primary,
+//         unselectedItemColor: theme.hintColor,
+//         items: <BottomNavigationBarItem>[
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.home),
+//             label: S.of(context).main,
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.search),
+//             label: S.of(context).search,
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.history),
+//             label: S.of(context).history,
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.person),
+//             label: S.of(context).profile,
+//           ),
+//         ],
+//       ),
